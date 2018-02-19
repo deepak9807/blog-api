@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load urlify %}
+
+<!-- title creating  -->
+{% block head_title %}
+{{ instance.title }}|{{ block.super }}
+{% endblock head_title %}
+
+{% block content %}
+<div class="col-sm-6 col-sm-offset-3">
+  {% if obj.image %}
+  <img src="{{ obj.image.url }}" class="img-responsive" width="304" height="236">
+  {% endif %}
+<h1>{{ title }}</h1><small>{{ instance.timestamp }}</small><br/>
+
+{{ instance.content| linebreaks }}<br/>
+<small> Last Update {{ instance.update }}</small><br/>
+
+</div>
+<div>
+  <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}">
+Facebook
+</a>
+<a href='https://plus.google.com/share?url={{ request.build_absolute_uri }}'> Google</a>
+  <a href="https://www.linkedin.com/shareArticle?mini=true&title={{ instance.title }}&url={{ request.build_absolute_uri }}&summery={{ instance.share_string|urlify }}">
+  Linkedin
+  </a>
+</div>
+{% endblock content %}
