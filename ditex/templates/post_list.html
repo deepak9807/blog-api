@@ -14,7 +14,7 @@
         {% if obj.image %}
         <img src="{{ obj.image.url }}" class="img-responsive" width="370" height="236">
         {% endif %}
-        <h3><a href="{{ obj.get_absolute_url }}">{{ obj.title }}<br/><small> {{ obj.timestamp|timesince }}</small> <br/></a>
+        <h3><a href="{{ obj.get_absolute_url }}">{{ obj.title }}<br/><small> {{ obj.publish }}</small> <br/></a>
 </h3>
         <p>{{ obj.content|linebreaks|truncatechars:40}}<br/></p>
         <p><a href="{{ obj.get_absolute_url }}" class="btn btn-primary" role="button">View</a> </p>

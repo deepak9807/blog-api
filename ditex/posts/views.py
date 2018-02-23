@@ -16,12 +16,13 @@ from .forms import PostForm
 from .models import Post
 
 def post_create(request):
-    if not request.user.is_staff or not request.user.is_superuser:
+    if not request.user.is_staff  or not request.user.is_superuser:
         raise Http404("Please Login.")
     form = PostForm(request.POST or None,request.FILES or None)
     if form.is_valid():
         instance = form.save(commit=False)
         instance.save()
+        instance.user=request.user
         #message success
         messages.success(request, "Successfuly created new item")
         return HttpResponseRedirect(instance.get_absolute_url())
@@ -33,7 +34,7 @@ def post_create(request):
     return render(request,'post_form.html',context)
 
 def post_detail(request, slug=None):
-    #instance = Post.objects.gets(id=1) Thsi throw wrror when data  does not exit in database
+    #instance = Post.objects.gets(id=1) Thsi throw error when data  does not exit in database
     instance = get_object_or_404(Post, slug=slug)
     share_string = quote_plus(instance.content)# this is create string show while share url
     context = {
@@ -44,7 +45,11 @@ def post_detail(request, slug=None):
     return render(request,'post_detail.html',context)
 
 def post_list(request):
-    queryset_list = Post.objects.all()
+    if request.user.is_staff:
+        queryset_list = Post.objects.all()
+    else :
+        queryset_list =Post.objects.active()
+
     paginator = Paginator(queryset_list, 5) # Show 25 contacts per page
     page_request_var='page'
     page = request.GET.get('page_request_var')
@@ -65,11 +70,13 @@ def post_list(request):
 def post_update(request, slug=None):
     if not request.user.is_staff or not request.user.is_superuser:
         raise Http404("Please Login.")
+
     instance = get_object_or_404(Post, slug=slug)
     form = PostForm(request.POST or None,request.FILES or None,instance=instance,)
     if form.is_valid():
         instance = form.save(commit=False)
         instance.save()
+        instance.user=request.user
         messages.success(request, "Successfuly created new item")
         return HttpResponseRedirect(instance.get_absolute_url())
 
