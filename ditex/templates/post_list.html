@@ -3,6 +3,10 @@
 {% block content %}
 <h1> List</h1><br/>
 
+<form method="GET" action="">
+    <input type="text" name="q" placeholder="Search.." value= '{{ request.GET.get }}'>
+    <input type="submit" value="Search" >
+</form>
 <div class="col-sm-8 col-sm-offset-3">
 {% for obj in objects_list %}
 <!-- <a href="/post/{{ obj.id }}/">{{ obj.title }}<br/></a> -->
@@ -28,8 +32,8 @@
 <div class="pagination">
     <span class="step-links">
         {% if objects_list.has_previous %}
-            <a href="?page=1">&laquo; first</a>
-            <a href="?{{ page_request_var }}={{ objects_list.previous_page_number }}">previous</a>
+            
+            <a href="?{{ page_request_var }}={{ objects_list.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">previous</a>
         {% endif %}
 
         <span class="current">
@@ -37,8 +41,8 @@
         </span>
 
         {% if objects_list.has_next %}
-            <a href="?{{ page_request_var }}={{ objects_list.next_page_number }}">next</a>
-            <a href="?{{ page_request_var }}={{ objects_list.paginator.num_pages }}">last &raquo;</a>
+            <a href="?{{ page_request_var }}={{ objects_list.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">next</a>
+          
         {% endif %}
     </span>
 </div>

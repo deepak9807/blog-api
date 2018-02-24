@@ -3,6 +3,7 @@
 from __future__ import unicode_literals
 from urllib import quote_plus  # Python 3+
 from django.contrib import messages
+from django.db.models import Q
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect
@@ -45,14 +46,24 @@ def post_detail(request, slug=None):
     return render(request,'post_detail.html',context)
 
 def post_list(request):
-    if request.user.is_staff:
-        queryset_list = Post.objects.all()
-    else :
-        queryset_list =Post.objects.active()
+    queryset_list =Post.objects.active()
 
-    paginator = Paginator(queryset_list, 5) # Show 25 contacts per page
+    if request.user.is_staff:
+        queryset_list = Post.objects.all()        
+
+    query = request.GET.get('q')
+
+    if query:
+        queryset_list = queryset_list.filter(
+            Q(title__icontains=query) |
+            Q(content__icontains=query) |
+            Q(user__first_name__icontains=query) |
+            Q(user__last_name__icontains=query) 
+            ).distinct()
+
+    paginator = Paginator(queryset_list, 2) # Show 25 contacts per page
     page_request_var='page'
-    page = request.GET.get('page_request_var')
+    page = request.GET.get(page_request_var)
     try:
         queryset = paginator.page(page)
     except PageNotAnInteger:
