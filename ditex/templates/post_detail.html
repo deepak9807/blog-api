@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load markdown_deux_tags %}
 {% load urlify %}
 
 <!-- title creating  -->
@@ -14,8 +15,9 @@
 <h1>{{ title }}</h1><small>{% if instance.draft %} <span style="color: red">Draft</span> {% endif %} {{ instance.publish }}</small><br/>
 <p> Author : {{ instance.user }}</p>
 
-{{ instance.content| linebreaks }}<br/>
+<div class="content-markdow">{{ instance.content|markdown }}<br/></div>
 <small> Last Update {{ instance.update }}</small><br/>
+
 
 </div>
 <div>
@@ -27,5 +29,6 @@ Facebook
   Linkedin
   </a>
 </div>
+
 <div class="fb-comments" data-href="{{ request.build_absolute_uri }}" data-numposts="5"></div>
 {% endblock content %}
