@@ -8,6 +8,9 @@ from django.db import models
 from django.core.urlresolvers import reverse
 from django.utils.text import slugify
 
+from django.utils.safestring import mark_safe
+from markdown_deux import markdown
+
 # Create your models here.
 
 
@@ -57,6 +60,11 @@ class Post(models.Model):
         # destinct multiple url name as same in different app then
         # we use namespace with url name
         return reverse("post:detail", kwargs={"slug": self.slug})
+
+    # Markdown using markdown -dux
+    def get_markdown(self, *arg, **kwargs):
+        content = self.content
+        return mark_safe(markdown(content))
 
     class Meta:
         ordering=["-timestamp", "-update"]

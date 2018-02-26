@@ -15,13 +15,13 @@
   <div class="col-sm-12 ">
     <div class="thumbnail img-thumbnail">
       <!-- <img src="..." alt="..."> -->
-      <div class="caption">
+      <div class="caption post_detail_item">
         {% if obj.image %}
         <img src="{{ obj.image.url }}" class="img-responsive" width="370" height="236">
         {% endif %}
         <h3><a href="{{ obj.get_absolute_url }}">{{ obj.title }}<br/><small> {{ obj.publish }}</small> <br/></a>
 </h3>
-        <p>{{ obj.content|truncatechars:40|markdown}}<br/></p>
+        <p>{{ obj.get_markdown|truncatewords:20}}<br/></p>
         <p><a href="{{ obj.get_absolute_url }}" class="btn btn-primary" role="button">View</a> </p>
       </div>
     </div>

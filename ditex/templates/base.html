@@ -43,15 +43,41 @@
 
 <script type="text/javascript">
 
-	$(document).ready(function(){
-		$(".content-markdown").each(function(){
+$(document).ready(function(){
+	$(".content-markdown").each(function(){
 			var content = $("this").text
 			console.log(content)
 			var markedDown = marked(content)
-			console.log(markedDown)			
+					
 		})
-		
+	$(".post_detail_item").each(function(){
+		$(this).addClass("img-responsive");
+		})
+
+	
+	var titleItem = $("#id_title");
+	$("#preview-title").text(titleItem.val())
+	
+	var contentInput = $("#id_content");
+
+	function setContent(value){
+		var markedContent = marked(value)
+		$('#preview-content').html(markedContent)
+		$('#preview-content').each(function(){
+			$(this).addClass("img-responsive")
+		})
+	}
+	setContent(contentInput.val())
+
+	contentInput.keyup(function(){
+		var newvalue = $(this).val()
+		setContent(newvalue)
 	})
+
+	})
+
+
+
 
 </script>
 </body>

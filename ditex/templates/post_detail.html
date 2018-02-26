@@ -15,7 +15,7 @@
 <h1>{{ title }}</h1><small>{% if instance.draft %} <span style="color: red">Draft</span> {% endif %} {{ instance.publish }}</small><br/>
 <p> Author : {{ instance.user }}</p>
 
-<div class="content-markdow">{{ instance.content|markdown }}<br/></div>
+<div class="post_detail_item">{{ instance.get_markdown }}<br/></div>
 <small> Last Update {{ instance.update }}</small><br/>
 
 
