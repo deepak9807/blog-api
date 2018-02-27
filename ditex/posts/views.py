@@ -37,7 +37,7 @@ def post_create(request):
 def post_detail(request, slug=None):
     #instance = Post.objects.gets(id=1) Thsi throw error when data  does not exit in database
     instance = get_object_or_404(Post, slug=slug)
-    share_string = quote_plus(instance.content)# this is create string show while share url
+    share_string = quote_plus(instance.slug)# this is create string show while share url
     context = {
     "title": instance.title,
     "instance": instance,

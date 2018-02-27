@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -5,6 +6,7 @@
 </head>
 <body>
 
+  <link rel="stylesheet" href='{% static "/css/base.css" %}'>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
 
 {% include "message_display.html" %}
@@ -26,6 +28,8 @@
   js.src = 'https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.12&appId=757130191132535&autoLogAppEvents=1';
   fjs.parentNode.insertBefore(js, fjs);
 }(document, 'script', 'facebook-jssdk'));</script>
+
+
 
 
 <script
@@ -53,10 +57,6 @@ $(document).ready(function(){
 	$(".post_detail_item").each(function(){
 		$(this).addClass("img-responsive");
 		})
-
-	
-	var titleItem = $("#id_title");
-	$("#preview-title").text(titleItem.val())
 	
 	var contentInput = $("#id_content");
 
@@ -70,8 +70,20 @@ $(document).ready(function(){
 	setContent(contentInput.val())
 
 	contentInput.keyup(function(){
-		var newvalue = $(this).val()
-		setContent(newvalue)
+		var newContent = $(this).val()
+		setContent(newContent)
+	})
+
+	var titleInput = $("#id_title");
+
+	function setTitle(value){
+		$("#preview-title").text(value)
+	}
+
+	setTitle(titleInput.val())
+	titleInput.keyup(function(){
+		var newTitle = $(this).val()
+		setTitle(newTitle)
 	})
 
 	})
