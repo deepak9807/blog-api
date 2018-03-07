@@ -5,6 +5,8 @@ from urllib import quote_plus  # Python 3+
 from django.contrib import messages
 from django.db.models import Q
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.contrib.contenttypes.models import ContentType
+
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect
 from django.shortcuts import render, get_object_or_404
@@ -12,6 +14,7 @@ from django.http import Http404
 
 # import the form.py form use to store the data in database
 from .forms import PostForm
+from comments.models import Comment
 # Create your views here.
 
 from .models import Post
@@ -38,10 +41,15 @@ def post_detail(request, slug=None):
     #instance = Post.objects.gets(id=1) Thsi throw error when data  does not exit in database
     instance = get_object_or_404(Post, slug=slug)
     share_string = quote_plus(instance.slug)# this is create string show while share url
+    content_type = ContentType.objects.get_for_model(Post)
+    obj_id   = instance.id
+
+    comments = Comment.objects.filter(content_type = content_type, object_id= obj_id)
     context = {
     "title": instance.title,
     "instance": instance,
-    "share_string":share_string
+    "share_string":share_string,
+    "comments":comments
     }
     return render(request,'post_detail.html',context)
 

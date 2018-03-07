@@ -16,7 +16,7 @@
 <p> Author : {{ instance.user }}</p>
 
 <div class="post_detail_item">{{ instance.get_markdown }}<br/></div>
-<small> Last Update {{ instance.update }}</small><br/>
+<small> Last Update {{ instance.comment_set.all }}</small><br/>
 
 
 </div>
@@ -30,5 +30,24 @@ Facebook
   </a>
 </div>
 
-<div class="fb-comments" data-href="{{ request.build_absolute_uri }}" data-numposts="5"></div>
+<!-- <div class="fb-comments" data-href="{{ request.build_absolute_uri }}" data-numposts="5"></div> -->
+
+<div>
+	<p class="lead"> Comments</p>
+	{% if comments   %}
+	{% for comment in comments %}
+		<div class="">
+			{{ comment.content }}
+		
+			<br/>
+			<small> via {{ comment.user }} | {{comment.timestamp|timesince }} ago</small>
+			<hr/>
+		</div>
+		{% endfor %}
+	{% endif %}
+	<p> No more comments</p>
+	
+	
+	
+</div>
 {% endblock content %}
