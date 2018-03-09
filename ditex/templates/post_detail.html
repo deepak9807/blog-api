@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load markdown_deux_tags %}
+{% load crispy_forms_tags %}
 {% load urlify %}
 
 <!-- title creating  -->
@@ -34,17 +35,42 @@ Facebook
 
 <div>
 	<p class="lead"> Comments</p>
+	<form method="POST" action="."> {% csrf_token %}
+		{{ comment_form|crispy }}
+		<input type="submit" value="post comment" class="btn btn-default">
+	</form>
+	<hr/> 
 	{% if comments   %}
 	{% for comment in comments %}
-		<div class="">
-			{{ comment.content }}
-		
-			<br/>
-			<small> via {{ comment.user }} | {{comment.timestamp|timesince }} ago</small>
-			<hr/>
+	
+		<blockquote class="blockquote">
+			<p>{{ comment.content }}</p>
+			<footer><small>via {{ comment.user }} | {{ comment.timestamp|timesince }} ago |
+				{% if comment.children.count > 0 %}{{ comment.children.count }} comment{% if comment.children.count >= 1 %}s{% endif %}|{% endif %}</small>
+				<a class="comment-reply-btn" href="#">Reply</a> 
+			</footer>
+			<div class="comment-reply">
+			{% for child_comment in comment.children %}
+				
+				<blockquote class="blockquote">
+					<p>{{ child_comment.content }}</p>
+					<footer> <small>via {{ child_comment.user }} |														{{ child_comment.timestamp|timesince }} ago</small></footer>
+
+				</blockquote>
+			{% endfor %}
+			<form method="POST" action="."> {% csrf_token %}
+				{{ comment_form|crispy }}
+				<input type="hidden" name="parent_id" value="{{ comment.id }}">
+				<input type="submit" value="reply" class="btn btn-default">
+			</form>
 		</div>
+
+		</blockquote>
+		<hr/>
+	
 		{% endfor %}
 	{% endif %}
+	<hr/>
 	<p> No more comments</p>
 	
 	

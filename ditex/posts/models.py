@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from django.db.models.signals import pre_save
+from django.contrib.contenttypes.models import ContentType
 
 from django.conf import settings
 
@@ -11,6 +12,7 @@ from django.utils.text import slugify
 from django.utils.safestring import mark_safe
 from markdown_deux import markdown
 
+from comments.models import Comment
 # Create your models here.
 
 
@@ -65,6 +67,18 @@ class Post(models.Model):
     def get_markdown(self, *arg, **kwargs):
         content = self.content
         return mark_safe(markdown(content))
+
+    @property
+    def comments(self):
+        instance = self
+        qs = Comment.objects.instance_of_comment(instance)
+        return qs 
+
+    @property
+    def get_content_type(self):
+        instance = self
+        content_type = ContentType.objects.get_for_model(instance.__class__)
+        return content_type
 
     class Meta:
         ordering=["-timestamp", "-update"]
