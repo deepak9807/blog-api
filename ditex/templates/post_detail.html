@@ -46,8 +46,8 @@ Facebook
 		<blockquote class="blockquote">
 			<p>{{ comment.content }}</p>
 			<footer><small>via {{ comment.user }} | {{ comment.timestamp|timesince }} ago |
-				{% if comment.children.count > 0 %}{{ comment.children.count }} comment{% if comment.children.count >= 1 %}s{% endif %}|{% endif %}</small>
-				<a class="comment-reply-btn" href="#">Reply</a> 
+				{% if comment.children.count > 0 %}{{ comment.children.count }} comment{% if comment.children.count >= 1 %}s{% endif %}|{% endif %}
+				<a class="comment-reply-btn" href="">Reply</a>|<a class="" href="{{ comment.get_absolute_url }}">Thread</a></small> 
 			</footer>
 			<div class="comment-reply">
 			{% for child_comment in comment.children %}

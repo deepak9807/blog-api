@@ -8,6 +8,7 @@ from django.conf import settings
 # Generic Foreign Key relation 
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
+from django.core.urlresolvers import reverse
 
 # Comment Model manager
 
@@ -41,6 +42,9 @@ class Comment(models.Model):
 		ordering =["-timestamp"]
 
 
+	def get_absolute_url(self):
+		return reverse("comments:thread",kwargs={"id":self.id})
+		
 	def __str__(self):
 		return str(self.user.username)
 
