@@ -18,6 +18,7 @@ from django.http import Http404
 from .forms import PostForm
 from comments.models import Comment
 from comments.forms import CommentForm
+from .utils import get_read_time
 # Create your views here.
 
 from .models import Post
@@ -46,7 +47,7 @@ def post_detail(request, slug=None):
     share_string = quote_plus(instance.slug)# this is create string show while share url
 
     comments = instance.comments # using costum model manager and commnet @property
-
+    print(get_read_time(instance.get_markdown()))
     initial_data = {
         "content_type": instance.get_content_type,
         "object_id": instance.id

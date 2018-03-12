@@ -9,20 +9,20 @@
 {% endblock head_title %}
 
 {% block content %}
-<div class="col-sm-6 col-sm-offset-3">
-	<h>Comments</h>
+<div class="">
+	<h1>Comments</h1>
 		<hr/>
-			<p>{{ comment.content }}</p>
+			<h4>{{ comment.content }}</h4>
 			<footer><small>via {{ comment.user }} | {{ comment.timestamp|timesince }} ago |
-				{% if comment.children.count > 0 %}{{ comment.children.count }} comment{% if comment.children.count >= 1 %}s{% endif %}|{% endif %}</small>
+				{% if comment.children.count > 0 %}{{ comment.children.count }} comment{% if comment.children.count >= 1 %}s{% endif %}|{% endif %}|{% if comment.user == request.user %}<a href="{{ comment.get_delete_url }}">Delete</a>{% endif %}</small>
 			
 			</footer>
 			<div>
 			{% for child_comment in comment.children %}
 				
 				<blockquote class="blockquote">
-					<p>{{ child_comment.content }}</p>
-					<footer> <small>via {{ child_comment.user }} |														{{ child_comment.timestamp|timesince }} ago</small></footer>
+					<h4>{{ child_comment.content }}</h4>
+					<footer> <small>via {{ child_comment.user }} |														{{ child_comment.timestamp|timesince }} ago|{% if child_comment.user == request.user %}<a href="{{ child_comment.get_delete_url }}">Delete</a>{% endif %}</small></footer>
 
 				</blockquote>
 			{% endfor %}

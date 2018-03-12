@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load markdown_deux_tags %}
+{% load crispy_forms_tags %}
+{% load urlify %}
+
+<!-- title creating  -->
+{% block head_title %}
+{{ instance.title }}|{{ block.super }}
+{% endblock head_title %}
+
+{% block content %}
+<div class="col-sm-6 col-sm-offset-3">
+	<h1> Delet the Comment</h1>
+ 		<form method="POST" action="."> {% csrf_token %}
+				{{ objects.content }}
+				<hr/>
+				<input type="submit" value="Confirm" class="btn btn-warning" href="{{ comment.get_absolute_url }}">
+				<button class="btn btn-default" href="{{ comment.get_absolute_url }}">Cancel</button>
+				
+			</form>
+
+		</div>
+	
+	
+</div>
+{% endblock content %}

@@ -13,8 +13,37 @@ from .forms import CommentForm
 from .models import Comment
 
 # Create your views here.
+def comment_delete(request,id):
+	obj = Comment.objects.get(id=id)
+	try:
+		obj = Comment.objects.get(id=id)
+	except:
+		raise Http404
+	if obj.user != request.user:
+		#messages.success(request, "This user does not have permission")
+		#raise Http404
+		reponse = HttpResponse("You do not have permission")
+		reponse.status_code= 403
+		return reponse
+
+	if request.method == 'POST':
+		parent_object_url = obj.content_object.get_absolute_url()
+		obj.delete()
+		messages.success(request, "This has been deleted")
+		return HttpResponseRedirect(parent_object_url)
+	context = {
+		"objects":obj
+	}
+	return render(request,"comment_delete.html", context)
+
 def comment_thread(request, id):
-	obj = get_object_or_404(Comment,id=id)
+	#obj = get_object_or_404(Comment,id=id)
+	obj = Comment.objects.get(id=id)
+	try:
+		obj = Comment.objects.get(id=id)
+	except:
+		raise Http404
+
 	content_object = obj.content_object
 	content_id = obj.content_object.id
 	
