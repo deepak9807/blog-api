@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% load markdown_deux_tags %}
+{% load crispy_forms_tags %}
+{% load urlify %}
+
+<!-- title creating  -->
+{% block head_title %}
+{{ instance.title }}|{{ block.super }}
+{% endblock head_title %}
+
+{% block block_post %}
+<li><a href="{{ instance.get_absolute_url }}">{{ instance.title }}</a></li>
+{% endblock block_post %}
+
+{% block content %}
+<div class="col-sm-8 ">
+	{% if obj.image %}
+	<img src="{{ obj.image.url }}" class="img-responsive" width="304" height="236">
+	{% endif %}
+	<h1>{{ title }}</h1><small>{% if instance.draft %} <span style="color: red">Draft</span> {% endif %} {{ instance.publish }}</small><br/>
+	<p>Read time:{{ instance.read_time|time:"i" }} minutes</p>
+	<p> Author : {{ instance.user }}</p>
+	<hr/>
+
+	<div class="post_detail_item">{{ instance.get_markdown }}<br/></div>
+	<small> Last Update {{ instance.comment_set.all }}</small><br/>
+
+
+	
+<div>
+  <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}">
+Facebook
+</a>
+<a href='https://plus.google.com/share?url={{ request.build_absolute_uri }}'> Google</a>
+  <a href="https://www.linkedin.com/shareArticle?mini=true&title={{ instance.title }}&url={{ request.build_absolute_uri }}&summery={{ instance.share_string|urlify }}">
+  Linkedin
+  </a>
+</div>
+
+<!-- <div class="fb-comments" data-href="{{ request.build_absolute_uri }}" data-numposts="5"></div> -->
+
+<div>
+
+	<p class="lead"> Comments</p>
+	{% if request.user.is_authenticated %}
+		<form method="POST" action="."> {% csrf_token %}
+			{{ comment_form|crispy }}
+			<input type="submit" value="post comment" class="btn btn-default">
+		</form>
+	{% else %}
+	<p> For comment you must login</p>
+	{% endif %}
+	<hr/> 
+
+	{% if comments   %}
+	{% for comment in comments %}
+	
+		<blockquote class="blockquote">
+			<p>{{ comment.content }}</p>
+			<footer><small>via {{ comment.user }} | {{ comment.timestamp|timesince }} ago |
+				{% if comment.children.count > 0 %}{{ comment.children.count }} comment{% if comment.children.count >= 1 %}s{% endif %}{% endif %}
+				<a class="comment-reply-btn" href="#">Reply</a>|<a class="" href="{{ comment.get_absolute_url }}">Thread</a></small>  
+			</footer>
+			<div class="comment-reply">
+			{% for child_comment in comment.children %}
+				
+				<blockquote class="blockquote">
+					<p>{{ child_comment.content }}</p>
+					<footer> <small>via {{ child_comment.user }} |														{{ child_comment.timestamp|timesince }} ago|</small></footer>
+
+				</blockquote>
+			{% endfor %}
+			{% if request.user.is_authenticated %}
+				<form method="POST" action="."> {% csrf_token %}
+					{{ comment_form|crispy }}
+					<input type="hidden" name="parent_id" value="{{ comment.id }}">
+					<input type="submit" value="reply" class="btn btn-default">
+				</form>
+			{% else %}
+			<p> For comment you must login</p>
+			{% endif %}
+		</div>
+
+		</blockquote>
+		<hr/>
+	
+		{% endfor %}
+	{% endif %}
+	<hr/>
+	<p> No more comments</p>
+	
+	
+</div>
+</div>
+{% endblock content %}

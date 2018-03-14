@@ -1,0 +1,125 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+<title>{% block head_title %} Ditex {% endblock head_title %}</title>
+</head>
+<body>
+
+  
+<div class="container  col-sm-offset-3">
+	<div class="col-sm-8">
+		<ol class="breadcrumb">
+			<li><a href="/">Home</a></li>
+			{% block block_post %}
+			{% endblock block_post %}
+
+			{% if not request.user.is_authenticated %}
+				<li class="pull-right"><a href="{% url 'register' %}">Register</a></li>
+				<li class="pull-right"><a href="{% url 'login' %}">Login</a></li>
+			{% else %}
+				<li class="pull-right"><a href="{% url 'logout' %}">Logout</a></li>
+			{% endif %}
+		</ol>
+
+	</div>
+	{% include "message_display.html" %}
+
+	{% block content %}
+	{% endblock content %}
+
+	{% block extra_content %} 
+	{% endblock extra_content %}
+</div>
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = 'https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.12&appId=757130191132535&autoLogAppEvents=1';
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+
+
+<script
+  src="https://code.jquery.com/jquery-1.12.2.min.js"
+  integrity="sha256-lZFHibXzMHo3GGeehn1hudTAP3Sc0uKXBXAzHX1sjtk="
+  crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.5/marked.min.js"></script>
+<link rel="stylesheet" href='{% static "/css/base.css" %}'>
+<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous"> -->
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+
+
+<script type="text/javascript">
+
+$(document).ready(function(){
+	$(".content-markdown").each(function(){
+			var content = $("this").text
+			console.log(content)
+			var markedDown = marked(content)
+					
+		})
+	$(".post_detail_item").each(function(){
+		$(this).addClass("img-responsive");
+		})
+	
+	var contentInput = $("#id_content");
+
+	function setContent(value){
+		var markedContent = marked(value)
+		$('#preview-content').html(markedContent)
+		$('#preview-content').each(function(){
+			$(this).addClass("img-responsive")
+		})
+	}
+	setContent(contentInput.val())
+
+	contentInput.keyup(function(){
+		var newContent = $(this).val()
+		setContent(newContent)
+	})
+
+	var titleInput = $("#id_title");
+
+	function setTitle(value){
+		$("#preview-title").text(value)
+	}
+
+	setTitle(titleInput.val())
+	
+	titleInput.keyup(function(){
+		var newTitle = $(this).val()
+		setTitle(newTitle)
+	})
+
+	$(".comment-reply-btn").click(function(event){
+		event.preventDefault();
+		$(this).parent().next(".comment-reply").fadeToggle();
+	})
+
+
+})
+
+
+
+
+</script>
+</body>
+</html>
