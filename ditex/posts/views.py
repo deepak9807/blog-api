@@ -4,6 +4,9 @@ from __future__ import unicode_literals
 from urllib import quote_plus  # Python 3+
 from django.contrib.contenttypes.models import ContentType
 
+from django.contrib.auth.decorators import login_required
+
+
 from django.contrib import messages
 from django.db.models import Q
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -23,6 +26,7 @@ from .utils import get_read_time
 
 from .models import Post
 
+@login_required #(login_url='/login') LOGIN_URL ='/login'
 def post_create(request):
     if not request.user.is_staff  or not request.user.is_superuser:
         raise Http404("Please Login.")
@@ -127,7 +131,7 @@ def post_update(request, slug=None):
 
     instance = get_object_or_404(Post, slug=slug)
     form = PostForm(request.POST or None,request.FILES or None,instance=instance,)
-    if form.is_valid():
+    if form.is_valid() and request.user.is_authenticated():
         instance = form.save(commit=False)
         instance.save()
         instance.user=request.user

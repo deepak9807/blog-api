@@ -2,8 +2,10 @@
 {% load markdown_deux_tags %}
 
 {% block content %}
-<h1> List</h1><br/>
+
+
 <div class="col-sm-8 ">
+<h1> List</h1><br/>
 <form method="GET" action="">
     <input type="text" name="q" placeholder="Search.." value= '{{ request.GET.get }}'>
     <input type="submit" value="Search" >

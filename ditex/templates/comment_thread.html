@@ -13,8 +13,8 @@
 	<h1>Comments</h1>
 		<hr/>
 			<h4>{{ comment.content }}</h4>
-			<footer><small>via {{ comment.user }} | {{ comment.timestamp|timesince }} ago |
-				{% if comment.children.count > 0 %}{{ comment.children.count }} comment{% if comment.children.count >= 1 %}s{% endif %}|{% endif %}|{% if comment.user == request.user %}<a href="{{ comment.get_delete_url }}">Delete</a>{% endif %}</small>
+			<footer><small>via {{ comment.user }} | {{ comment.timestamp|timesince }} ago 
+				{% if comment.children.count > 0 %}{{ comment.children.count }} comment{% if comment.children.count >= 1 %}s{% endif %}{% endif %}{% if comment.user == request.user %}<a href="{{ comment.get_delete_url }}">| Delete</a>{% endif %}</small>
 			
 			</footer>
 			<div>
@@ -26,11 +26,15 @@
 
 				</blockquote>
 			{% endfor %}
-			<form method="POST" action="."> {% csrf_token %}
-				{{ form|crispy }}
-				<input type="hidden" name="parent_id" value="{{ comment.id }}">
-				<input type="submit" value="reply" class="btn btn-default">
-			</form>
+			{% if request.user.is_authenticated %}
+				<form method="POST" action="."> {% csrf_token %}
+					{{ form|crispy }}
+					<input type="hidden" name="parent_id" value="{{ comment.id }}">
+					<input type="submit" value="reply" class="btn btn-default">
+				</form>
+			{% else %}
+			<p> For comment you must login</p>
+			{% endif %}
 		</div>
 
 		<hr/>

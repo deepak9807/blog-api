@@ -8,21 +8,25 @@
 {{ instance.title }}|{{ block.super }}
 {% endblock head_title %}
 
+{% block block_post %}
+<li><a href="{{ instance.get_absolute_url }}">{{ instance.title }}</a></li>
+{% endblock block_post %}
+
 {% block content %}
-<div class="">
-  {% if obj.image %}
-  <img src="{{ obj.image.url }}" class="img-responsive" width="304" height="236">
-  {% endif %}
-<h1>{{ title }}</h1><small>{% if instance.draft %} <span style="color: red">Draft</span> {% endif %} {{ instance.publish }}</small><br/>
-<p>Read time:{{ instance.read_time|time:"i" }} minutes</p>
-<p> Author : {{ instance.user }}</p>
-<hr/>
+<div class="col-sm-8 ">
+	{% if obj.image %}
+	<img src="{{ obj.image.url }}" class="img-responsive" width="304" height="236">
+	{% endif %}
+	<h1>{{ title }}</h1><small>{% if instance.draft %} <span style="color: red">Draft</span> {% endif %} {{ instance.publish }}</small><br/>
+	<p>Read time:{{ instance.read_time|time:"i" }} minutes</p>
+	<p> Author : {{ instance.user }}</p>
+	<hr/>
 
-<div class="post_detail_item">{{ instance.get_markdown }}<br/></div>
-<small> Last Update {{ instance.comment_set.all }}</small><br/>
+	<div class="post_detail_item">{{ instance.get_markdown }}<br/></div>
+	<small> Last Update {{ instance.comment_set.all }}</small><br/>
 
 
-</div>
+	
 <div>
   <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}">
 Facebook
@@ -36,12 +40,18 @@ Facebook
 <!-- <div class="fb-comments" data-href="{{ request.build_absolute_uri }}" data-numposts="5"></div> -->
 
 <div>
+
 	<p class="lead"> Comments</p>
-	<form method="POST" action="."> {% csrf_token %}
-		{{ comment_form|crispy }}
-		<input type="submit" value="post comment" class="btn btn-default">
-	</form>
+	{% if request.user.is_authenticated %}
+		<form method="POST" action="."> {% csrf_token %}
+			{{ comment_form|crispy }}
+			<input type="submit" value="post comment" class="btn btn-default">
+		</form>
+	{% else %}
+	<p> For comment you must login</p>
+	{% endif %}
 	<hr/> 
+
 	{% if comments   %}
 	{% for comment in comments %}
 	
@@ -60,11 +70,15 @@ Facebook
 
 				</blockquote>
 			{% endfor %}
-			<form method="POST" action="."> {% csrf_token %}
-				{{ comment_form|crispy }}
-				<input type="hidden" name="parent_id" value="{{ comment.id }}">
-				<input type="submit" value="reply" class="btn btn-default">
-			</form>
+			{% if request.user.is_authenticated %}
+				<form method="POST" action="."> {% csrf_token %}
+					{{ comment_form|crispy }}
+					<input type="hidden" name="parent_id" value="{{ comment.id }}">
+					<input type="submit" value="reply" class="btn btn-default">
+				</form>
+			{% else %}
+			<p> For comment you must login</p>
+			{% endif %}
 		</div>
 
 		</blockquote>
@@ -76,6 +90,6 @@ Facebook
 	<p> No more comments</p>
 	
 	
-	
+</div>
 </div>
 {% endblock content %}
