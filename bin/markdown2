@@ -1,4 +1,4 @@
-#!/home/deepak/code_ditex/bin/python2
+#!/home/deepak/blog-api/bin/python
 
 import sys
 from os.path import join, dirname, exists

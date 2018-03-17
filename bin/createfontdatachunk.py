@@ -1,4 +1,4 @@
-#!/home/deepak/code_ditex/bin/python2
+#!/home/deepak/blog-api/bin/python
 from __future__ import print_function
 import base64
 import os
