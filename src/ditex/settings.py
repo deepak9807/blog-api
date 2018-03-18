@@ -25,7 +25,7 @@ SECRET_KEY = '2eo&*ngzj=6z#+^o&8(scx)l43lmnw=uwd2(3^$*!c&e#*n5v8'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['https://minduses.herokuapp.com/']
 
 
 # Application definition
